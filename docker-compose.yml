@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: newsbear-db
+    environment:
+      POSTGRES_USER: newsbear
+      POSTGRES_PASSWORD: badNewsBear
+      POSTGRES_DB: newsbear
+    ports:
+      - "5433:5432"
+    volumes:
+      - newsbear_pgdata:/var/lib/postgresql/data
+
+volumes:
+  newsbear_pgdata:
