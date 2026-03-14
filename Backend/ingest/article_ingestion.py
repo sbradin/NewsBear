@@ -3,7 +3,7 @@ from eventregistry import *
 from dotenv import load_dotenv
 import os
 import sys
-from Backend.app.db import store_articles
+from app.db import store_articles
 
 sys.stdout.reconfigure(encoding="utf-8") # type: ignore
 

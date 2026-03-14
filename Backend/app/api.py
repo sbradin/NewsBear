@@ -34,17 +34,20 @@ LIMIT 1;
 """)
 
 INSERT_LABEL_SQL = text("""
-INSERT INTO article_labels (article_id, labeler, good_bad)
-VALUES (:article_id, :labeler, :good_bad)
+INSERT INTO article_labels (article_id, labeler, good_bad, is_political, notes)
+VALUES (:article_id, :labeler, :good_bad, :is_political, :notes)
 ON CONFLICT (article_id, labeler) DO UPDATE SET
   good_bad = EXCLUDED.good_bad,
+  is_political = EXCLUDED.is_political,
+  notes = EXCLUDED.notes,
   created_at = now();
 """)
 
 class LabelIn(BaseModel):
     article_id: int
     good_bad: int  # -1,0,1
-    is_political: boolean
+    is_political: boolean | None = None
+    notes: str | None = None
     labeler: str = "local"
 
 @app.get("/label/next")
@@ -66,6 +69,7 @@ def label_article(payload: LabelIn):
             "article_id": payload.article_id,
             "labeler": payload.labeler,
             "good_bad": payload.good_bad,
-            "is_political": payload.is_political
+            "is_political": payload.is_political,
+            "notes": payload.notes
         })
     return {"ok": True}
